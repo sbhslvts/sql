@@ -17,7 +17,8 @@ The `||` values concatenate the columns into strings.
 Edit the appropriate columns -- you're making two edits -- and the NULL rows will be fixed. 
 All the other rows will remain the same.) */
 
-
+SELECT product_name || ', ' || coalesce(product_size, '')|| ' (' || coalesce(product_qty_type, 'unit') || ')' , ' '
+FROM product ;
 
 
 --Windowed Functions
@@ -30,17 +31,51 @@ each new market date for each customer, or select only the unique market dates p
 (without purchase details) and number those visits. 
 HINT: One of these approaches uses ROW_NUMBER() and one uses DENSE_RANK(). */
 
+-- Approach 1. Using row_number 
+-- Should I show all collumns here or just chose customer_id and market_date?
+SELECT *
+	, row_number () OVER (PARTITION BY customer_id ORDER BY market_date) AS [row_number]
+FROM customer_purchases ;
+
+-- Approach 2. Using dense_rank
+SELECT  customer_id
+	, market_date
+	, dense_rank () OVER (PARTITION BY customer_id ORDER BY market_date) AS [rank]
+FROM customer_purchases ;
 
 /* 2. Reverse the numbering of the query from a part so each customer’s most recent visit is labeled 1, 
 then write another query that uses this one as a subquery (or temp table) and filters the results to 
 only the customer’s most recent visit. */
 
+-- Approach 1 - subquery 
+SELECT *
+FROM (
+					SELECT customer_id
+						, market_date
+						, dense_rank () OVER (PARTITION BY customer_id ORDER BY market_date DESC) AS [rank_desc]
+					FROM customer_purchases
+) AS x
+WHERE x.rank_desc = 1
+GROUP BY customer_id , market_date ;
+
+-- Approach 2 - temp.table
+DROP TABLE IF EXISTS recent_visit ;
+CREATE TEMPORARY TABLE recent_visit AS
+				SELECT customer_id
+								, market_date
+								, dense_rank () OVER (PARTITION BY customer_id ORDER BY market_date DESC) AS [rank_desc]
+				FROM customer_purchases;
+SELECT *
+FROM recent_visit
+WHERE recent_visit.rank_desc = 1
+GROUP BY customer_id , market_date ;
 
 /* 3. Using a COUNT() window function, include a value along with each row of the 
 customer_purchases table that indicates how many different times that customer has purchased that product_id. */
 
-
-
+SELECT *
+				, COUNT(product_id) OVER (PARTITION BY customer_id , product_id) AS times_purchased
+FROM customer_purchases ;
 
 -- String manipulations
 /* 1. Some product names in the product table have descriptions like "Jar" or "Organic". 
@@ -54,11 +89,26 @@ Remove any trailing or leading whitespaces. Don't just use a case statement for 
 
 Hint: you might need to use INSTR(product_name,'-') to find the hyphens. INSTR will help split the column. */
 
-
+SELECT *
+	, instr (product_name , '-') AS [hypen_posit]
+	, CASE
+		WHEN instr (product_name , '-') > 0
+		THEN ltrim(rtrim(substr (product_name, instr (product_name, '-') + 1)))
+		ELSE NULL
+	  END  AS [prod_descr]
+FROM product ;
 
 /* 2. Filter the query to show any product_size value that contain a number with REGEXP. */
 
-
+SELECT *
+	, instr (product_name , '-') AS [hypen_posit]
+	, CASE
+		WHEN instr (product_name , '-') > 0
+		THEN ltrim(rtrim(substr (product_name, instr (product_name, '-') + 1)))
+		ELSE NULL
+	  END  AS [prod_descr]
+FROM product 
+WHERE product_size REGEXP '[0-9]' ;
 
 -- UNION
 /* 1. Using a UNION, write a query that displays the market dates with the highest and lowest total sales.
@@ -70,6 +120,28 @@ HINT: There are a possibly a few ways to do this query, but if you're struggling
 3) Query the second temp table twice, once for the best day, once for the worst day, 
 with a UNION binding them. */
 
+DROP TABLE IF EXISTS total_sales_date ;
+DROP TABLE IF EXISTS total_sales_date_ranked;
+CREATE TEMPORARY TABLE total_sales_date AS
+		SELECT market_date
+				, sum(round(quantity * cost_to_customer_per_qty , 2)) AS sales
+		FROM customer_purchases
+		GROUP BY market_date;
+		
+CREATE TEMPORARY TABLE total_sales_date_ranked AS
+SELECT *
+		, dense_rank () OVER (order by sales) AS [rank_total_sales]
+FROM total_sales_date;
 
+SELECT market_date
+		, sales
+		, 'worst' as day_type 
+FROM total_sales_date_ranked
+WHERE rank_total_sales=(select min(rank_total_sales) FROM total_sales_date_ranked)
+UNION
+SELECT market_date
+		, sales
+		, 'best' as dayType FROM total_sales_date_ranked
+WHERE rank_total_sales=(SELECT max(rank_total_sales) from total_sales_date_ranked) ;
 
 
