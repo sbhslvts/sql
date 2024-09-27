@@ -5,7 +5,7 @@ Create a logical model for a small bookstore. 📚
 
 At the minimum it should have employee, order, sales, customer, and book entities (tables). Determine sensible column and table design based on what you know about these concepts. Keep it simple, but work out sensible relationships to keep tables reasonably sized. Include a date table. There are several tools online you can use, I'd recommend [_Draw.io_](https://www.drawio.com/) or [_LucidChart_](https://www.lucidchart.com/pages/).
 
-![Book_store_ERD](https://github.com/user-attachments/assets/5e78e593-36ed-4c73-bb0a-30f29af80426)
+![Book_store_ERD](https://github.com/user-attachments/assets/b3609ff0-43d3-4283-ab16-72907ed7d1f2)
 
 ## Question 2
 
