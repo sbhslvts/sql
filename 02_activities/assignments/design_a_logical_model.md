@@ -20,9 +20,17 @@ The store wants to keep customer addresses. Propose two architectures for the CU
 _Hint, search type 1 vs type 2 slowly changing dimensions._
 
 Bonus: Are there privacy implications to this, why or why not?
-```
-Your answer...
-```
+
+There will be two architectural approaches for the customer addresses table, each utilizing a different Slowly Changing Dimension (SCD) type. This is because people typically don't change their primary residence frequently. Depending on whether we prioritize overwriting old address data or retaining a history of changes, each approach will have unique privacy implications:
+Architecture 1 (type 1): Overwrite address
+![Customer_adress_rewrite](https://github.com/user-attachments/assets/e15fd637-f9c4-4a61-befa-56cc43b6f7f7)
+
+This approach raises fewer privacy concerns as it only stores the current address. However, it limits the ability to conduct trend analysis. On the other hand, given that this ERD is designed for a locally operated bookshop, this architecture may be more suitable for a starting business due to its simpler implementation and lower risk of data exposure.
+
+Architecture 2 (type 2): Overwrite address
+![Customer_adress_history](https://github.com/user-attachments/assets/90bad460-e788-4539-a448-898d5bbf7e7f)
+
+Current customer's address will has an end_date of NULL. I believe this approach would be implemented when we initiate online or mail-order book sales.
 
 ## Question 4
 Review the AdventureWorks Schema [here](https://i.stack.imgur.com/LMu4W.gif)
