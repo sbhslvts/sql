@@ -22,7 +22,9 @@ _Hint, search type 1 vs type 2 slowly changing dimensions._
 Bonus: Are there privacy implications to this, why or why not?
 
 There will be two architectural approaches for the customer addresses table, each utilizing a different Slowly Changing Dimension (SCD) type. This is because people typically don't change their primary residence frequently. Depending on whether we prioritize overwriting old address data or retaining a history of changes, each approach will have unique privacy implications:
+
 Architecture 1 (type 1): Overwrite address
+
 ![Customer_adress_rewrite](https://github.com/user-attachments/assets/e15fd637-f9c4-4a61-befa-56cc43b6f7f7)
 
 This approach raises fewer privacy concerns as it only stores the current address. However, it limits the ability to conduct trend analysis. On the other hand, given that this ERD is designed for a locally operated bookshop, this architecture may be more suitable for a starting business due to its simpler implementation and lower risk of data exposure.
@@ -37,7 +39,10 @@ Review the AdventureWorks Schema [here](https://i.stack.imgur.com/LMu4W.gif)
 
 Highlight at least two differences between it and your ERD. Would you change anything in yours?
 ```
-Your answer...
+AdventureWorks schema is significantly more extensive and intricate, suggesting it models a larger and more complex business operation compared to the relatively simpler bookstore model.
+First of all Schema modeling a wide array of business functions (Sales, Purchasing, Production, Human Resources etc) but my ERD focuses primarily on sales.
+Secondly, AdventureWorks demonstrates a higher degree of establishing relationships within and between tables. This means a reliable and scalable data model.
+Here are a few potential enhancements to the bookstore ERD:  introduce new entities to capture more business aspects. For instance, adding Suppliers to track book procurement, Shipping to manage order fulfillment, and Payments to record transaction details could enhance the model's functionality.
 ```
 
 # Criteria
