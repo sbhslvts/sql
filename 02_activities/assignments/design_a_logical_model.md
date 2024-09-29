@@ -29,7 +29,7 @@ Architecture 1 (type 1): Overwrite address
 
 This approach raises fewer privacy concerns as it only stores the current address. However, it limits the ability to conduct trend analysis. On the other hand, given that this ERD is designed for a locally operated bookshop, this architecture may be more suitable for a starting business due to its simpler implementation and lower risk of data exposure.
 
-Architecture 2 (type 2): Overwrite address
+Architecture 2 (type 2): Retain address
 ![Customer_adress_history](https://github.com/user-attachments/assets/90bad460-e788-4539-a448-898d5bbf7e7f)
 
 Current customer's address will has an end_date of NULL. I believe this approach would be implemented when we initiate online or mail-order book sales.
