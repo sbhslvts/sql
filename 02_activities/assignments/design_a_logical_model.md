@@ -41,7 +41,7 @@ Highlight at least two differences between it and your ERD. Would you change any
 ```
 AdventureWorks schema is significantly more extensive and intricate, suggesting it models a larger and more complex business operation compared to the relatively simpler bookstore model.
 First of all Schema modeling a wide array of business functions (Sales, Purchasing, Production, Human Resources etc) but my ERD focuses primarily on sales.
-Secondly, AdventureWorks demonstrates a higher degree of establishing relationships within and between tables. This means a reliable and scalable data model.
+Secondly,AdventureWorks demonstrates a higher degree of establishing relationships within and between tables. This means a reliable and scalable data model.
 Here are a few potential enhancements to the bookstore ERD:  introduce new entities to capture more business aspects. For instance, adding Suppliers to track book procurement, Shipping to manage order fulfillment, and Payments to record transaction details could enhance the model's functionality.
 ```
 
